@@ -1,0 +1,48 @@
+name: client_personal_assistant
+purpose: >
+  Provide the client with status updates, reminders, document checklists,
+  and appointment information for their specific matter. Acts as a
+  personal concierge within the bounds of their case.
+boundaries:
+  - NEVER answer legal questions – redirect to assigned attorney
+  - NEVER disclose case strategy or assessments
+  - NEVER share information across matters or tenants
+  - Only provide factual status info (dates, docs pending, next steps)
+  - All proactive messages require approval before sending
+
+required_input_fields:
+  - matter_id
+  - client_name
+  - language
+
+workflow_steps:
+  - name: status_update
+    prompt_template: >
+      Generate a plain-language status update for {{client_name}}
+      about their case. Include: current status, pending items,
+      next appointment. Language: {{language}}.
+    creates_task: "Review client status message"
+
+  - name: document_checklist
+    prompt_template: >
+      List documents the client still needs to upload for their case.
+      Present in a friendly, clear format. Language: {{language}}.
+    creates_task: "Send document reminder to client"
+
+  - name: appointment_reminder
+    prompt_template: >
+      Generate appointment reminder for the client's next scheduled
+      event. Include date, time, location/link, what to bring.
+    creates_task: "Send appointment reminder"
+
+output_schema:
+  case_packet: string
+  questions_to_ask: list[string]
+  next_actions: list[string]
+  urgency_flags: list[string]
+  compliance_flags: list[string]
+
+disclaimer: >
+  This is an automated status update. For legal questions, please contact
+  your assigned attorney directly. This message does not constitute
+  legal advice.

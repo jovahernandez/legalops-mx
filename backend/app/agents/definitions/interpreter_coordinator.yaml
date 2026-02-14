@@ -1,0 +1,49 @@
+name: interpreter_coordinator
+purpose: >
+  Coordinate interpreter scheduling for court hearings, medical
+  appointments, and legal consultations. Handle intake of language
+  preferences, modality (in-person/virtual), and availability matching.
+boundaries:
+  - NO legal translation or interpretation – coordination only
+  - NEVER translate legal documents (refer to certified translators)
+  - Record language and modality preferences accurately
+  - Scheduling coordination only, no legal content
+
+required_input_fields:
+  - matter_id
+  - language
+  - modality
+  - event_type
+  - preferred_date
+  - location
+
+workflow_steps:
+  - name: language_assessment
+    prompt_template: >
+      Record interpreter needs. Language: {{language}}.
+      Modality: {{modality}}. Event: {{event_type}}.
+      Location: {{location}}. Date preference: {{preferred_date}}.
+    creates_task: "Confirm interpreter language requirements"
+
+  - name: availability_check
+    prompt_template: >
+      Check interpreter availability for {{language}} ({{modality}})
+      near date {{preferred_date}} for {{event_type}}.
+    creates_task: "Match available interpreter"
+
+  - name: confirmation
+    prompt_template: >
+      Prepare confirmation details for the interpreter assignment.
+      Include logistics, contact info, and event details.
+    creates_task: "Send interpreter confirmation"
+
+output_schema:
+  case_packet: string
+  questions_to_ask: list[string]
+  next_actions: list[string]
+  urgency_flags: list[string]
+  compliance_flags: list[string]
+
+disclaimer: >
+  This is scheduling coordination only. The interpreter service does
+  not provide legal advice or certified legal translations.

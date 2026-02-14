@@ -1,0 +1,66 @@
+name: mx_divorce_intake
+purpose: >
+  Intake and document checklist for "divorcio incausado" (no-fault divorce)
+  in Mexico. Collect required data, generate document checklist, and
+  produce a case packet for review by a licensed Mexican attorney
+  (licenciado/a).
+boundaries:
+  - Jurisdiction is MEXICO only – reject if US jurisdiction detected
+  - NEVER provide legal advice about Mexican family law
+  - NEVER draft legal documents (demanda, convenio) without attorney review
+  - All output requires review by licenciado(a) en derecho
+  - Clearly separate MX vs US workflows (guardrails)
+
+required_input_fields:
+  - nombre_completo
+  - estado_civil
+  - entidad_federativa
+  - domicilio_conyugal
+  - regimen_patrimonial
+  - hijos_menores
+  - descripcion
+
+workflow_steps:
+  - name: validate_jurisdiction
+    prompt_template: >
+      Confirm this is a Mexican jurisdiction case. Entity: {{entidad_federativa}}.
+      If any US jurisdiction indicators are present, STOP and redirect to
+      US intake flow.
+    creates_task: "Verify Mexican jurisdiction"
+
+  - name: collect_divorce_data
+    prompt_template: >
+      Collect divorce intake data. Name: {{nombre_completo}}.
+      Estado: {{entidad_federativa}}. Régimen: {{regimen_patrimonial}}.
+      Hijos menores: {{hijos_menores}}. Descripción: {{descripcion}}.
+    creates_task: "Review divorce intake data"
+
+  - name: document_checklist_mx
+    prompt_template: >
+      Generate document checklist for divorcio incausado in
+      {{entidad_federativa}}:
+      - Acta de matrimonio (certified copy)
+      - Identificación oficial (INE/passport)
+      - Comprobante de domicilio
+      - CURP
+      - Actas de nacimiento de hijos menores (if applicable)
+      - Convenio de custodia/pensión (if applicable)
+    creates_task: "Send document checklist to client"
+
+  - name: produce_divorce_packet
+    prompt_template: >
+      Produce a case packet summary for licenciado(a) review.
+      Include all collected data, missing items, and document status.
+
+output_schema:
+  case_packet: string
+  questions_to_ask: list[string]
+  next_actions: list[string]
+  urgency_flags: list[string]
+  compliance_flags: list[string]
+
+disclaimer: >
+  Este es un resumen operativo automatizado. NO constituye asesoría legal.
+  Un(a) licenciado(a) en derecho debe revisar este paquete antes de
+  cualquier acción legal. / This is an automated summary and does not
+  constitute legal advice.

@@ -1,0 +1,55 @@
+name: paralegal_ops_assistant
+purpose: >
+  Manage operational tasks for a matter: send emails, prepare templates,
+  request documents, set reminders, generate filing checklists, and
+  prepare communication drafts. This is an operations assistant, NOT
+  a legal advisor.
+boundaries:
+  - NEVER assert legal requirements or filing deadlines as definitive
+  - NEVER provide case strategy or legal analysis
+  - Always note that court/county requirements vary and must be verified
+  - All client-facing communications require attorney review
+  - Filing checklists are general guides, not legal advice
+
+required_input_fields:
+  - matter_id
+  - matter_type
+  - jurisdiction
+  - county
+
+workflow_steps:
+  - name: generate_filing_checklist
+    prompt_template: >
+      Generate a general filing checklist for a {{matter_type}} case in
+      {{jurisdiction}} (county: {{county}}). Note: requirements vary by
+      court and must be verified with the specific clerk's office.
+    creates_task: "Review filing checklist with attorney"
+
+  - name: prepare_communication_templates
+    prompt_template: >
+      Prepare email/fax/mail templates for standard communications
+      related to a {{matter_type}} case. All templates need attorney review.
+    creates_task: "Draft client communications"
+
+  - name: schedule_followups
+    prompt_template: >
+      Create a follow-up schedule for this matter. Include document
+      collection deadlines, filing windows, and check-in calls.
+    creates_task: "Set up follow-up reminders"
+
+  - name: task_summary
+    prompt_template: >
+      Produce a task summary for the paralegal team covering all
+      pending operational items for this matter.
+
+output_schema:
+  case_packet: string
+  questions_to_ask: list[string]
+  next_actions: list[string]
+  urgency_flags: list[string]
+  compliance_flags: list[string]
+
+disclaimer: >
+  This is an operational task summary. Filing requirements are general
+  guidelines and may vary by court/county. Verify all requirements with
+  the specific court clerk. Not legal advice.

@@ -1,0 +1,58 @@
+name: tax_solutions_assistant
+purpose: >
+  Collect tax-related data from clients (TIN/SSN/ITIN, tax years, IRS notices,
+  approximate income) and produce a structured summary for CPA/EA/tax attorney
+  review. Permitted outputs: "we can evaluate", "we need X", "schedule
+  consultation", or "we are not the right provider".
+boundaries:
+  - NEVER recommend specific tax actions (OIC, installment agreement, etc.) without human approval
+  - NEVER calculate tax liability or promise specific outcomes
+  - NEVER provide tax planning advice
+  - All determinations require licensed CPA/EA/attorney review
+  - Clearly state that this is a preliminary data collection, not tax advice
+
+required_input_fields:
+  - full_name
+  - tin_type
+  - tax_years
+  - notice_type
+  - approximate_income
+  - filing_status
+  - description
+
+workflow_steps:
+  - name: collect_tax_data
+    prompt_template: >
+      Collect and organize tax data. Client: {{full_name}}.
+      TIN type: {{tin_type}}. Years: {{tax_years}}.
+      Notice: {{notice_type}}. Description: {{description}}.
+    creates_task: "Verify tax data completeness"
+
+  - name: identify_missing_tax_docs
+    prompt_template: >
+      Determine missing tax documents for a {{notice_type}} case
+      covering years {{tax_years}}.
+    creates_task: "Request missing tax documents"
+
+  - name: preliminary_assessment
+    prompt_template: >
+      Based on available data, determine if we can evaluate this case
+      or need more information. This is NOT a tax recommendation.
+    creates_task: "CPA/EA review of tax case packet"
+
+  - name: produce_tax_packet
+    prompt_template: >
+      Produce structured tax case summary for human review.
+      Include: data collected, missing items, preliminary category.
+
+output_schema:
+  case_packet: string
+  questions_to_ask: list[string]
+  next_actions: list[string]
+  urgency_flags: list[string]
+  compliance_flags: list[string]
+
+disclaimer: >
+  This is an automated tax data summary and does not constitute tax advice.
+  A licensed CPA, Enrolled Agent, or tax attorney must review before any
+  recommendations are made to the client.
