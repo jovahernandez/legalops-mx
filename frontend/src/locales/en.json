@@ -1,0 +1,292 @@
+{
+  "common": {
+    "appName": "LegalOps",
+    "appTagline": "Legal Operations Platform",
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "submit": "Submit",
+    "back": "Back",
+    "next": "Next",
+    "close": "Close",
+    "yes": "Yes",
+    "no": "No",
+    "or": "or",
+    "all": "All",
+    "none": "None",
+    "search": "Search",
+    "filter": "Filter",
+    "actions": "Actions",
+    "details": "Details",
+    "status": "Status",
+    "date": "Date",
+    "type": "Type",
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone / WhatsApp",
+    "password": "Password",
+    "description": "Description",
+    "required": "Required",
+    "optional": "Optional"
+  },
+  "errors": {
+    "networkError": "Could not connect to the server. Please try again later.",
+    "fetchFailed": "Failed to load data. The server may be under maintenance.",
+    "loginFailed": "Invalid credentials. Please try again.",
+    "submitFailed": "Could not submit the form. Please try again.",
+    "unauthorized": "Session expired. Please sign in again.",
+    "notFound": "Not found.",
+    "generic": "An unexpected error occurred.",
+    "retry": "Retry",
+    "backToHome": "Back to Home"
+  },
+  "demo": {
+    "banner": "Demo Mode \u2014 Data will not be saved. Backend is not connected.",
+    "noBackend": "Server is unavailable. Showing sample data.",
+    "label": "DEMO"
+  },
+  "disclaimer": {
+    "text": "This platform does NOT provide legal advice. All generated documents require review by a licensed professional before delivery to clients.",
+    "short": "Not legal advice. Requires professional review."
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "pipeline": "Pipeline",
+    "approvals": "Approvals",
+    "leads": "Leads",
+    "analytics": "Analytics",
+    "newIntake": "+ New Intake",
+    "signOut": "Sign Out",
+    "settings": "Settings"
+  },
+  "landing": {
+    "title": "Legal Operations Platform",
+    "subtitle": "Automate intake, documents, and case management for your firm \u2014 with AI agents and mandatory human approval.",
+    "b2bTitle": "For Law Firms",
+    "b2bDesc": "Automate intake, triage, and operations. Set up your firm in minutes.",
+    "b2bCta": "Set Up My Firm",
+    "b2bLogin": "Already have an account? Sign in",
+    "b2cTitle": "Need Legal Help?",
+    "b2cDesc": "Get a free document checklist and preparation guide for your case. No account needed.",
+    "b2cCta": "Get My Free Prep Kit",
+    "b2cIntake": "Or submit a general intake form"
+  },
+  "login": {
+    "title": "Sign In",
+    "emailLabel": "Email",
+    "passwordLabel": "Password",
+    "submitBtn": "Sign In",
+    "demoHint": "Demo: admin@demo.legal / admin123",
+    "forgotPassword": "Forgot your password?"
+  },
+  "onboarding": {
+    "title": "Set Up Your Firm",
+    "subtitle": "Complete the information to activate your account in minutes.",
+    "step1Title": "Firm Information",
+    "firmName": "Firm name",
+    "adminEmail": "Admin email",
+    "adminPassword": "Password",
+    "practiceAreas": "Practice areas",
+    "step2Title": "Legal Notices",
+    "step2Desc": "Review the notices that will be shown to your clients.",
+    "disclaimerEs": "Notice in Spanish",
+    "disclaimerEn": "Notice in English",
+    "step3Title": "All Set!",
+    "step3Desc": "Your firm has been successfully configured.",
+    "loginUrl": "Login URL",
+    "embedSnippet": "Embed code for your website",
+    "goToLogin": "Go to Login",
+    "createFirm": "Create Firm",
+    "nextStep": "Next",
+    "prevStep": "Back"
+  },
+  "help": {
+    "title": "Need Legal Help?",
+    "subtitle": "We help you prepare your case with a personalized checklist.",
+    "step1Title": "What type of matter do you have?",
+    "step2Title": "Tell us about your situation",
+    "step3Title": "Your contact information",
+    "step4Title": "Your personalized checklist",
+    "caseTypes": {
+      "mx_divorce": "Uncontested Divorce (Mexico)",
+      "mx_consumer": "Consumer Complaint (PROFECO/CONDUSEF)",
+      "mx_labor": "Labor Matter (Mexico)",
+      "immigration": "Immigration (US)",
+      "tax_resolution": "Tax Resolution (US)"
+    },
+    "situationLabel": "Briefly describe your situation",
+    "situationPlaceholder": "E.g.: I want to file for divorce but I don't know what documents I need...",
+    "fullName": "Full name",
+    "whatsapp": "Phone / WhatsApp",
+    "emailOptional": "Email (optional)",
+    "state": "State / Region",
+    "selectState": "Select your state",
+    "preferredLang": "Preferred language for communication",
+    "docsTitle": "Documents you need",
+    "docsRequired": "Required",
+    "docsOptional": "Optional",
+    "questionsTitle": "Suggested questions for your attorney",
+    "resultTitle": "Your Preparation Kit",
+    "resultDesc": "A verified attorney will contact you soon.",
+    "submitBtn": "Get My Checklist",
+    "startOver": "Start Over",
+    "progress": "Document progress",
+    "docNames": {
+      "acta_matrimonio": "Marriage Certificate",
+      "ine_pasaporte": "ID (INE) or Passport",
+      "curp": "CURP",
+      "comprobante_domicilio": "Proof of Address",
+      "acta_nacimiento_hijos": "Children's Birth Certificates",
+      "convenio_propuesto": "Proposed Agreement",
+      "poder_notarial": "Power of Attorney",
+      "ticket_compra": "Purchase Receipt",
+      "contrato_servicio": "Service Contract",
+      "reclamacion_previa": "Prior Claim (if applicable)",
+      "evidencia_comunicacion": "Communication Evidence",
+      "carta_reclamo": "Complaint Letter",
+      "contrato_laboral": "Employment Contract",
+      "recibos_nomina": "Pay Stubs (3 months)",
+      "carta_despido": "Termination / Resignation Letter",
+      "alta_imss": "IMSS Registration/Deregistration",
+      "evidencia_horas_extras": "Overtime Evidence",
+      "constancia_antiguedad": "Seniority Certificate"
+    }
+  },
+  "intake": {
+    "title": "Intake Form",
+    "subtitle": "Start your case by submitting your information. A professional will contact you soon.",
+    "caseType": "Case type",
+    "selectCase": "Select case type",
+    "fullName": "Full name",
+    "whatsapp": "Phone / WhatsApp",
+    "emailOptional": "Email (optional)",
+    "state": "State / Region",
+    "selectState": "Select your state",
+    "description": "Describe your situation",
+    "descPlaceholder": "Tell us the details of your case...",
+    "submitBtn": "Submit Intake",
+    "successTitle": "Intake Submitted!",
+    "successMsg": "We received your information. A professional will contact you soon.",
+    "newIntake": "Submit Another Intake"
+  },
+  "pipeline": {
+    "title": "Case Pipeline",
+    "stages": {
+      "new_lead": "New Lead",
+      "intake_completed": "Intake Complete",
+      "docs_pending": "Docs Pending",
+      "expediente_draft": "File Draft",
+      "pending_approval": "Pending Approval",
+      "approved": "Approved",
+      "contract_onboarding": "Contract",
+      "in_progress": "In Progress",
+      "closed": "Closed"
+    },
+    "urgency": "Urgency",
+    "daysInStage": "days in stage",
+    "moveForward": "Advance",
+    "moveBack": "Go Back",
+    "noItems": "No cases in this stage",
+    "viewDetails": "View details",
+    "subtitle": "Kanban view of all intakes and cases. Move items between stages.",
+    "noName": "No name",
+    "loading": "Loading pipeline..."
+  },
+  "leads": {
+    "title": "Leads",
+    "subtitle": "Leads captured from B2C and direct channels.",
+    "filters": {
+      "all": "All",
+      "new": "New",
+      "routed": "Routed",
+      "contacted": "Contacted",
+      "converted": "Converted",
+      "lost": "Lost"
+    },
+    "table": {
+      "contact": "Contact",
+      "vertical": "Vertical",
+      "source": "Source",
+      "status": "Status",
+      "date": "Date",
+      "region": "Region"
+    },
+    "noLeads": "No leads match this filter.",
+    "verticals": {
+      "mx_divorce": "Divorce MX",
+      "mx_consumer": "Consumer MX",
+      "mx_labor": "Labor MX",
+      "immigration": "Immigration US",
+      "tax_resolution": "Tax US"
+    }
+  },
+  "approvals": {
+    "title": "Human Approval Gate",
+    "subtitle": "All items require review by a licensed attorney or authorized staff before delivery.",
+    "filters": {
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "all": "All"
+    },
+    "approve": "Approve",
+    "reject": "Reject",
+    "reviewNotes": "Review notes",
+    "noApprovals": "No pending items.",
+    "objectTypes": {
+      "agent_run": "Agent Run",
+      "message_draft": "Message Draft"
+    }
+  },
+  "analytics": {
+    "title": "Analytics",
+    "period7": "Last 7 days",
+    "period30": "Last 30 days",
+    "kpis": {
+      "intakes": "Intakes",
+      "matters": "Matters",
+      "approvals": "Approvals",
+      "leads": "Leads",
+      "events": "Events"
+    },
+    "funnel": {
+      "title": "Conversion Funnel",
+      "vertical": "Vertical",
+      "stage": "Stage",
+      "count": "Count",
+      "dropoff": "Drop-off"
+    },
+    "noData": "No data for the selected period."
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "pendingIntakes": "Pending Intakes",
+    "activeMatters": "Active Matters",
+    "convertToMatter": "Convert to Matter",
+    "urgencyScore": "Urgency score",
+    "noIntakes": "No pending intakes.",
+    "noMatters": "No active matters."
+  },
+  "matter": {
+    "tabs": {
+      "overview": "Overview",
+      "documents": "Documents",
+      "tasks": "Tasks",
+      "agents": "Agents",
+      "approvals": "Approvals",
+      "messages": "Messages"
+    },
+    "jurisdiction": "Jurisdiction",
+    "urgency": "Urgency",
+    "completeness": "Completeness",
+    "missingDocs": "Missing documents",
+    "missingFields": "Missing fields"
+  },
+  "feedback": {
+    "title": "How was your experience?",
+    "placeholder": "Tell us how we can improve...",
+    "submit": "Submit Feedback",
+    "thanks": "Thanks for your feedback!",
+    "ratingLabel": "Rating"
+  }
+}

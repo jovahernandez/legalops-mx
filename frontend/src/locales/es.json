@@ -1,0 +1,292 @@
+{
+  "common": {
+    "appName": "LegalOps",
+    "appTagline": "Plataforma de Operaciones Legales",
+    "loading": "Cargando...",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "submit": "Enviar",
+    "back": "Atr\u00e1s",
+    "next": "Siguiente",
+    "close": "Cerrar",
+    "yes": "S\u00ed",
+    "no": "No",
+    "or": "o",
+    "all": "Todos",
+    "none": "Ninguno",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "actions": "Acciones",
+    "details": "Detalles",
+    "status": "Estado",
+    "date": "Fecha",
+    "type": "Tipo",
+    "name": "Nombre",
+    "email": "Correo electr\u00f3nico",
+    "phone": "Tel\u00e9fono / WhatsApp",
+    "password": "Contrase\u00f1a",
+    "description": "Descripci\u00f3n",
+    "required": "Requerido",
+    "optional": "Opcional"
+  },
+  "errors": {
+    "networkError": "No se pudo conectar con el servidor. Intenta de nuevo m\u00e1s tarde.",
+    "fetchFailed": "Error al cargar los datos. Puede que el servidor est\u00e9 en mantenimiento.",
+    "loginFailed": "Credenciales inv\u00e1lidas. Intenta de nuevo.",
+    "submitFailed": "No se pudo enviar el formulario. Intenta de nuevo.",
+    "unauthorized": "Sesi\u00f3n expirada. Inicia sesi\u00f3n de nuevo.",
+    "notFound": "No encontrado.",
+    "generic": "Ocurri\u00f3 un error inesperado.",
+    "retry": "Reintentar",
+    "backToHome": "Volver al inicio"
+  },
+  "demo": {
+    "banner": "Modo Demo \u2014 Los datos no se guardar\u00e1n. El backend no est\u00e1 conectado.",
+    "noBackend": "El servidor no est\u00e1 disponible. Mostrando datos de ejemplo.",
+    "label": "DEMO"
+  },
+  "disclaimer": {
+    "text": "Esta plataforma NO ofrece asesor\u00eda legal. Todos los documentos generados requieren revisi\u00f3n por un profesional con c\u00e9dula antes de ser entregados.",
+    "short": "No es asesor\u00eda legal. Requiere revisi\u00f3n profesional."
+  },
+  "nav": {
+    "dashboard": "Panel Principal",
+    "pipeline": "Pipeline",
+    "approvals": "Aprobaciones",
+    "leads": "Prospectos",
+    "analytics": "Anal\u00edticos",
+    "newIntake": "+ Nuevo Intake",
+    "signOut": "Cerrar Sesi\u00f3n",
+    "settings": "Configuraci\u00f3n"
+  },
+  "landing": {
+    "title": "Plataforma de Operaciones Legales",
+    "subtitle": "Automatiza intake, documentos y gesti\u00f3n de casos para tu despacho \u2014 con agentes de IA y aprobaci\u00f3n humana obligatoria.",
+    "b2bTitle": "Para Despachos Jur\u00eddicos",
+    "b2bDesc": "Automatiza intake, triaje y operaciones. Configura tu despacho en minutos.",
+    "b2bCta": "Configurar Mi Despacho",
+    "b2bLogin": "\u00bfYa tienes cuenta? Inicia sesi\u00f3n",
+    "b2cTitle": "\u00bfNecesitas Ayuda Legal?",
+    "b2cDesc": "Obt\u00e9n un checklist gratuito de documentos y gu\u00eda de preparaci\u00f3n para tu caso. Sin cuenta necesaria.",
+    "b2cCta": "Obtener Mi Prep Kit Gratis",
+    "b2cIntake": "O env\u00eda un formulario de intake general"
+  },
+  "login": {
+    "title": "Iniciar Sesi\u00f3n",
+    "emailLabel": "Correo electr\u00f3nico",
+    "passwordLabel": "Contrase\u00f1a",
+    "submitBtn": "Iniciar Sesi\u00f3n",
+    "demoHint": "Demo: admin@demo.legal / admin123",
+    "forgotPassword": "\u00bfOlvidaste tu contrase\u00f1a?"
+  },
+  "onboarding": {
+    "title": "Configura Tu Despacho",
+    "subtitle": "Completa la informaci\u00f3n para activar tu cuenta en minutos.",
+    "step1Title": "Informaci\u00f3n del Despacho",
+    "firmName": "Nombre del despacho",
+    "adminEmail": "Correo del administrador",
+    "adminPassword": "Contrase\u00f1a",
+    "practiceAreas": "\u00c1reas de pr\u00e1ctica",
+    "step2Title": "Avisos Legales",
+    "step2Desc": "Revisa los avisos que se mostrar\u00e1n a tus clientes.",
+    "disclaimerEs": "Aviso en Espa\u00f1ol",
+    "disclaimerEn": "Aviso en Ingl\u00e9s",
+    "step3Title": "Listo",
+    "step3Desc": "Tu despacho ha sido configurado exitosamente.",
+    "loginUrl": "URL de acceso",
+    "embedSnippet": "C\u00f3digo para incrustar en tu sitio web",
+    "goToLogin": "Ir al Login",
+    "createFirm": "Crear Despacho",
+    "nextStep": "Siguiente",
+    "prevStep": "Anterior"
+  },
+  "help": {
+    "title": "\u00bfNecesitas Ayuda Legal?",
+    "subtitle": "Te ayudamos a preparar tu caso con un checklist personalizado.",
+    "step1Title": "\u00bfQu\u00e9 tipo de asunto tienes?",
+    "step2Title": "Cu\u00e9ntanos tu situaci\u00f3n",
+    "step3Title": "Tus datos de contacto",
+    "step4Title": "Tu checklist personalizado",
+    "caseTypes": {
+      "mx_divorce": "Divorcio Incausado",
+      "mx_consumer": "Queja de Consumidor (PROFECO/CONDUSEF)",
+      "mx_labor": "Asunto Laboral",
+      "immigration": "Inmigraci\u00f3n (EE.UU.)",
+      "tax_resolution": "Resoluci\u00f3n Fiscal (EE.UU.)"
+    },
+    "situationLabel": "Describe brevemente tu situaci\u00f3n",
+    "situationPlaceholder": "Ej: Quiero tramitar mi divorcio pero no s\u00e9 qu\u00e9 documentos necesito...",
+    "fullName": "Nombre completo",
+    "whatsapp": "Tel\u00e9fono / WhatsApp",
+    "emailOptional": "Correo electr\u00f3nico (opcional)",
+    "state": "Entidad federativa",
+    "selectState": "Selecciona tu estado",
+    "preferredLang": "Idioma preferido para comunicaci\u00f3n",
+    "docsTitle": "Documentos que necesitas",
+    "docsRequired": "Requerido",
+    "docsOptional": "Opcional",
+    "questionsTitle": "Preguntas sugeridas para tu abogado",
+    "resultTitle": "Tu Kit de Preparaci\u00f3n",
+    "resultDesc": "Un abogado verificado te contactar\u00e1 pronto.",
+    "submitBtn": "Obtener Mi Checklist",
+    "startOver": "Comenzar de Nuevo",
+    "progress": "Progreso de documentos",
+    "docNames": {
+      "acta_matrimonio": "Acta de Matrimonio",
+      "ine_pasaporte": "INE o Pasaporte",
+      "curp": "CURP",
+      "comprobante_domicilio": "Comprobante de Domicilio",
+      "acta_nacimiento_hijos": "Acta de Nacimiento de Hijos",
+      "convenio_propuesto": "Convenio Propuesto",
+      "poder_notarial": "Poder Notarial",
+      "ticket_compra": "Ticket o Comprobante de Compra",
+      "contrato_servicio": "Contrato de Servicio",
+      "reclamacion_previa": "Reclamaci\u00f3n Previa (si aplica)",
+      "evidencia_comunicacion": "Evidencia de Comunicaci\u00f3n",
+      "carta_reclamo": "Carta de Reclamo",
+      "contrato_laboral": "Contrato Laboral",
+      "recibos_nomina": "Recibos de N\u00f3mina (3 meses)",
+      "carta_despido": "Carta de Despido / Renuncia",
+      "alta_imss": "Alta o Baja del IMSS",
+      "evidencia_horas_extras": "Evidencia de Horas Extra",
+      "constancia_antiguedad": "Constancia de Antig\u00fcedad"
+    }
+  },
+  "intake": {
+    "title": "Formulario de Intake",
+    "subtitle": "Comienza tu caso enviando tu informaci\u00f3n. Un profesional te contactar\u00e1 pronto.",
+    "caseType": "Tipo de caso",
+    "selectCase": "Selecciona el tipo de caso",
+    "fullName": "Nombre completo",
+    "whatsapp": "Tel\u00e9fono / WhatsApp",
+    "emailOptional": "Correo electr\u00f3nico (opcional)",
+    "state": "Entidad federativa",
+    "selectState": "Selecciona tu estado",
+    "description": "Describe tu situaci\u00f3n",
+    "descPlaceholder": "Cu\u00e9ntanos los detalles de tu caso...",
+    "submitBtn": "Enviar Intake",
+    "successTitle": "\u00a1Intake Enviado!",
+    "successMsg": "Recibimos tu informaci\u00f3n. Un profesional se pondr\u00e1 en contacto contigo pronto.",
+    "newIntake": "Enviar Otro Intake"
+  },
+  "pipeline": {
+    "title": "Pipeline de Casos",
+    "stages": {
+      "new_lead": "Nuevo Lead",
+      "intake_completed": "Intake Completo",
+      "docs_pending": "Docs Pendientes",
+      "expediente_draft": "Exp. Borrador",
+      "pending_approval": "Por Aprobar",
+      "approved": "Aprobado",
+      "contract_onboarding": "Contrato",
+      "in_progress": "En Proceso",
+      "closed": "Cerrado"
+    },
+    "urgency": "Urgencia",
+    "daysInStage": "d\u00edas en etapa",
+    "moveForward": "Avanzar",
+    "moveBack": "Retroceder",
+    "noItems": "Sin casos en esta etapa",
+    "viewDetails": "Ver detalles",
+    "subtitle": "Vista Kanban de todos los intakes y expedientes. Mueve elementos entre etapas.",
+    "noName": "Sin nombre",
+    "loading": "Cargando pipeline..."
+  },
+  "leads": {
+    "title": "Prospectos",
+    "subtitle": "Leads capturados desde B2C y canales directos.",
+    "filters": {
+      "all": "Todos",
+      "new": "Nuevos",
+      "routed": "Ruteados",
+      "contacted": "Contactados",
+      "converted": "Convertidos",
+      "lost": "Perdidos"
+    },
+    "table": {
+      "contact": "Contacto",
+      "vertical": "Vertical",
+      "source": "Fuente",
+      "status": "Estado",
+      "date": "Fecha",
+      "region": "Regi\u00f3n"
+    },
+    "noLeads": "No hay prospectos con este filtro.",
+    "verticals": {
+      "mx_divorce": "Divorcio MX",
+      "mx_consumer": "Consumidor MX",
+      "mx_labor": "Laboral MX",
+      "immigration": "Inmigraci\u00f3n US",
+      "tax_resolution": "Fiscal US"
+    }
+  },
+  "approvals": {
+    "title": "Puerta de Aprobaci\u00f3n Humana",
+    "subtitle": "Todos los elementos requieren revisi\u00f3n de un abogado o personal autorizado antes de ser enviados.",
+    "filters": {
+      "pending": "Pendientes",
+      "approved": "Aprobados",
+      "rejected": "Rechazados",
+      "all": "Todos"
+    },
+    "approve": "Aprobar",
+    "reject": "Rechazar",
+    "reviewNotes": "Notas de revisi\u00f3n",
+    "noApprovals": "No hay elementos pendientes.",
+    "objectTypes": {
+      "agent_run": "Ejecuci\u00f3n de Agente",
+      "message_draft": "Borrador de Mensaje"
+    }
+  },
+  "analytics": {
+    "title": "Anal\u00edticos",
+    "period7": "\u00daltimos 7 d\u00edas",
+    "period30": "\u00daltimos 30 d\u00edas",
+    "kpis": {
+      "intakes": "Intakes",
+      "matters": "Casos",
+      "approvals": "Aprobaciones",
+      "leads": "Prospectos",
+      "events": "Eventos"
+    },
+    "funnel": {
+      "title": "Embudo de Conversi\u00f3n",
+      "vertical": "Vertical",
+      "stage": "Etapa",
+      "count": "Cantidad",
+      "dropoff": "Ca\u00edda"
+    },
+    "noData": "No hay datos para el per\u00edodo seleccionado."
+  },
+  "dashboard": {
+    "title": "Panel Principal",
+    "pendingIntakes": "Intakes Pendientes",
+    "activeMatters": "Casos Activos",
+    "convertToMatter": "Convertir a Caso",
+    "urgencyScore": "Puntuaci\u00f3n de urgencia",
+    "noIntakes": "No hay intakes pendientes.",
+    "noMatters": "No hay casos activos."
+  },
+  "matter": {
+    "tabs": {
+      "overview": "Resumen",
+      "documents": "Documentos",
+      "tasks": "Tareas",
+      "agents": "Agentes",
+      "approvals": "Aprobaciones",
+      "messages": "Mensajes"
+    },
+    "jurisdiction": "Jurisdicci\u00f3n",
+    "urgency": "Urgencia",
+    "completeness": "Completitud",
+    "missingDocs": "Documentos faltantes",
+    "missingFields": "Campos faltantes"
+  },
+  "feedback": {
+    "title": "\u00bfC\u00f3mo fue tu experiencia?",
+    "placeholder": "Cu\u00e9ntanos c\u00f3mo podemos mejorar...",
+    "submit": "Enviar Feedback",
+    "thanks": "\u00a1Gracias por tu feedback!",
+    "ratingLabel": "Calificaci\u00f3n"
+  }
+}

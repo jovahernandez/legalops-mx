@@ -2,34 +2,30 @@
 
 import { useEffect, useState } from 'react';
 import { api } from '@/lib/api';
+import { useI18n } from '@/lib/i18n';
+import ErrorCard from '@/components/ErrorCard';
 
-const VERTICALS = ['immigration', 'tax_resolution', 'mx_divorce', 'interpreter'];
+const VERTICALS = ['mx_divorce', 'mx_consumer', 'mx_labor', 'immigration', 'tax_resolution'];
 
 export default function AnalyticsPage() {
+  const { t } = useI18n();
   const [overview7, setOverview7] = useState<any>(null);
   const [overview30, setOverview30] = useState<any>(null);
   const [funnel, setFunnel] = useState<any>(null);
-  const [selectedVertical, setSelectedVertical] = useState('immigration');
-  const [error, setError] = useState('');
-
-  useEffect(() => {
-    loadData();
-  }, []);
-
-  useEffect(() => {
-    loadFunnel();
-  }, [selectedVertical]);
+  const [selectedVertical, setSelectedVertical] = useState('mx_divorce');
+  const [error, setError] = useState(false);
 
   const loadData = async () => {
     try {
+      setError(false);
       const [o7, o30] = await Promise.all([
         api.getAnalyticsOverview(7),
         api.getAnalyticsOverview(30),
       ]);
       setOverview7(o7);
       setOverview30(o30);
-    } catch (err: any) {
-      setError(err.message);
+    } catch {
+      setError(true);
     }
   };
 
@@ -37,38 +33,36 @@ export default function AnalyticsPage() {
     try {
       const f = await api.getAnalyticsFunnel(selectedVertical, 30);
       setFunnel(f);
-    } catch (err: any) {
-      setError(err.message);
+    } catch {
+      // non-critical
     }
   };
 
-  if (error) return <div className="text-red-600 p-4">{error}</div>;
+  useEffect(() => { loadData(); }, []);
+  useEffect(() => { loadFunnel(); }, [selectedVertical]);
+
+  if (error) return <div className="py-12"><ErrorCard onRetry={loadData} /></div>;
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-6">Analytics</h1>
+      <h1 className="text-2xl font-bold mb-6">{t('analytics.title')}</h1>
 
-      {/* KPI Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        <KPICard label="Intakes (7d)" value={overview7?.intakes_total} prev={overview30?.intakes_total} suffix=" (30d)" />
-        <KPICard label="Matters (7d)" value={overview7?.matters_total} prev={overview30?.matters_total} suffix=" (30d)" />
-        <KPICard label="Approvals Pending" value={overview7?.approvals_pending} />
-        <KPICard label="Approvals Approved (7d)" value={overview7?.approvals_approved} prev={overview30?.approvals_approved} suffix=" (30d)" />
-        <KPICard label="Approvals Rejected (7d)" value={overview7?.approvals_rejected} />
-        <KPICard label="Time to Approve (med)" value={overview7?.time_to_approve_median_hours != null ? `${overview7.time_to_approve_median_hours}h` : 'N/A'} />
-        <KPICard label="Leads (7d)" value={overview7?.leads_total} prev={overview30?.leads_total} suffix=" (30d)" />
-        <KPICard label="Events (7d)" value={overview7?.events_total} prev={overview30?.events_total} suffix=" (30d)" />
+        <KPICard label={`${t('analytics.kpis.intakes')} (7d)`} value={overview7?.intakes_total} prev={overview30?.intakes_total} suffix=" (30d)" />
+        <KPICard label={`${t('analytics.kpis.matters')} (7d)`} value={overview7?.matters_total} prev={overview30?.matters_total} suffix=" (30d)" />
+        <KPICard label={t('analytics.kpis.approvals')} value={overview7?.approvals_pending} />
+        <KPICard label={`${t('analytics.kpis.leads')} (7d)`} value={overview7?.leads_total} prev={overview30?.leads_total} suffix=" (30d)" />
+        <KPICard label={`${t('analytics.kpis.events')} (7d)`} value={overview7?.events_total} prev={overview30?.events_total} suffix=" (30d)" />
       </div>
 
-      {/* Funnel */}
-      <section className="bg-white rounded-lg shadow p-6 mb-8">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-semibold">Conversion Funnel (30d)</h2>
-          <div className="flex gap-2">
+      <section className="bg-white rounded-lg shadow-sm border p-6 mb-8">
+        <div className="flex flex-wrap justify-between items-center mb-4 gap-3">
+          <h2 className="text-lg font-semibold">{t('analytics.funnel.title')} (30d)</h2>
+          <div className="flex flex-wrap gap-2">
             {VERTICALS.map((v) => (
               <button key={v} onClick={() => setSelectedVertical(v)}
-                className={`px-3 py-1 rounded text-sm ${selectedVertical === v ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700'}`}>
-                {v.replace('_', ' ')}
+                className={`px-3 py-1 rounded text-xs ${selectedVertical === v ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700'}`}>
+                {t(`leads.verticals.${v}`)}
               </button>
             ))}
           </div>
@@ -100,58 +94,16 @@ export default function AnalyticsPage() {
             })}
           </div>
         ) : (
-          <p className="text-gray-500 text-sm">Loading funnel...</p>
+          <p className="text-gray-500 text-sm">{t('common.loading')}</p>
         )}
       </section>
-
-      {/* Drop-off table */}
-      {funnel?.steps && (
-        <section className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-lg font-semibold mb-4">Top Drop-Off Steps</h2>
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="text-left text-gray-500 border-b">
-                <th className="pb-2">Step Transition</th>
-                <th className="pb-2">From</th>
-                <th className="pb-2">To</th>
-                <th className="pb-2">Drop-off</th>
-              </tr>
-            </thead>
-            <tbody>
-              {funnel.steps.slice(1)
-                .map((step: any, i: number) => ({
-                  from_name: funnel.steps[i].name,
-                  to_name: step.name,
-                  from_count: funnel.steps[i].count,
-                  to_count: step.count,
-                  dropoff: funnel.steps[i].count > 0
-                    ? Math.round((1 - step.count / funnel.steps[i].count) * 100)
-                    : 0,
-                }))
-                .sort((a: any, b: any) => b.dropoff - a.dropoff)
-                .map((row: any, i: number) => (
-                  <tr key={i} className="border-b last:border-0">
-                    <td className="py-2">{row.from_name} &rarr; {row.to_name}</td>
-                    <td className="py-2">{row.from_count}</td>
-                    <td className="py-2">{row.to_count}</td>
-                    <td className="py-2">
-                      <span className={`font-medium ${row.dropoff > 50 ? 'text-red-600' : row.dropoff > 25 ? 'text-yellow-600' : 'text-green-600'}`}>
-                        {row.dropoff}%
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
-        </section>
-      )}
     </div>
   );
 }
 
 function KPICard({ label, value, prev, suffix }: { label: string; value: any; prev?: any; suffix?: string }) {
   return (
-    <div className="bg-white rounded-lg shadow p-4">
+    <div className="bg-white rounded-lg shadow-sm border p-4">
       <p className="text-xs text-gray-500 mb-1">{label}</p>
       <p className="text-2xl font-bold">{value ?? '-'}</p>
       {prev != null && <p className="text-xs text-gray-400 mt-1">{prev}{suffix}</p>}
