@@ -1,8 +1,10 @@
-import os
-
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from slowapi.errors import RateLimitExceeded
 
+from app.config import settings
+from app.rate_limit import limiter
 from app.routers import (
     auth, tenants, intakes, matters, documents, agents,
     approvals, tasks, messages, interpreters,
@@ -20,17 +22,31 @@ app = FastAPI(
     version="0.1.0",
 )
 
-CORS_ORIGINS = os.environ.get(
-    "CORS_ORIGINS", "http://localhost:3000,http://web:3000"
-).split(",")
+# Explicit origins: FRONTEND_URL + localhost dev servers
+_explicit_origins = [
+    settings.FRONTEND_URL.rstrip("/"),
+    "http://localhost:3000",
+    "http://web:3000",
+]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[o.strip() for o in CORS_ORIGINS],
+    allow_origins=[o for o in _explicit_origins if o],
+    allow_origin_regex=r"^https://.*\.vercel\.app$",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# --- Rate limiter ---
+app.state.limiter = limiter
+
+@app.exception_handler(RateLimitExceeded)
+async def rate_limit_handler(request: Request, exc: RateLimitExceeded):
+    return JSONResponse(
+        status_code=429,
+        content={"detail": "Too many requests. Please try again later."},
+    )
 
 # --- Routers ----------------------------------------------------------------
 app.include_router(auth.router)

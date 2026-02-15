@@ -1,17 +1,19 @@
 """Public intake endpoint – no auth required."""
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.models import Intake, Tenant
 from app.schemas import IntakeCreate, IntakeOut
+from app.rate_limit import limiter
 
 router = APIRouter(tags=["intakes"])
 
 
 @router.post("/public/intake", response_model=IntakeOut, status_code=201)
-def create_public_intake(body: IntakeCreate, db: Session = Depends(get_db)):
+@limiter.limit("10/minute")
+def create_public_intake(request: Request, body: IntakeCreate, db: Session = Depends(get_db)):
     """Public endpoint: anyone can submit an intake. No auth required."""
     tenant = db.query(Tenant).filter(Tenant.id == body.tenant_id).first()
     if not tenant:

@@ -294,6 +294,7 @@ class LeadCreate(BaseModel):
     vertical: str | None = None
     contact: dict[str, Any] = {}
     utm: dict[str, str] = {}
+    website: str | None = None  # honeypot field – must remain empty
 
 
 class LeadOut(BaseModel):
@@ -327,6 +328,7 @@ class PrepKitRequest(BaseModel):
     phone: str | None = None
     language: str = "en"
     utm: dict[str, str] = {}
+    website: str | None = None  # honeypot field – must remain empty
 
 
 class PrepKitResponse(BaseModel):
@@ -345,6 +347,7 @@ class OnboardTenantRequest(BaseModel):
     practice_areas: list[str]
     disclaimer_en: str = "This platform does not provide legal advice."
     disclaimer_es: str = "Esta plataforma no proporciona asesoría legal."
+    website: str | None = None  # honeypot field – must remain empty
 
 
 class OnboardTenantResponse(BaseModel):

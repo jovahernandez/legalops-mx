@@ -1,6 +1,6 @@
 """Public lead capture + B2B onboarding + B2C Prep Kit + lead management."""
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 
 from app.database import get_db
@@ -11,13 +11,25 @@ from app.schemas import (
     OnboardTenantRequest, OnboardTenantResponse,
 )
 from app.agents.orchestrator import AgentOrchestrator
+from app.agents.openai_llm import OpenAIProvider
+from app.agents.policy_engine import PolicyEngine
 from app.config import settings
 from app.services.lead_routing import route_lead
 from app.routers.templates import VERTICAL_TEMPLATES
+from app.rate_limit import limiter
 
 router = APIRouter(tags=["leads"])
 
 orchestrator = AgentOrchestrator()
+_prepkit_llm = OpenAIProvider()
+_prepkit_policy = PolicyEngine()
+
+
+def _check_honeypot(body) -> None:
+    """Reject submissions that fill in the hidden honeypot field."""
+    hp = getattr(body, "website", None) or getattr(body, "hp_field", None)
+    if hp:
+        raise HTTPException(status_code=422, detail="Invalid submission")
 
 
 def _get_checklist_for_vertical(case_type: str) -> list[str]:
@@ -49,8 +61,10 @@ def _get_disclaimer_for_vertical(case_type: str, language: str = "es") -> str:
 
 
 @router.post("/public/lead", response_model=LeadOut, status_code=201)
-def create_lead(body: LeadCreate, db: Session = Depends(get_db)):
+@limiter.limit("10/minute")
+def create_lead(request: Request, body: LeadCreate, db: Session = Depends(get_db)):
     """Public: capture a lead from B2C or B2B channel."""
+    _check_honeypot(body)
     contact = {**body.contact, **{f"utm_{k}": v for k, v in body.utm.items()}}
     lead = Lead(
         source_type=body.source_type,
@@ -69,10 +83,12 @@ def create_lead(body: LeadCreate, db: Session = Depends(get_db)):
 
 
 @router.post("/public/prepkit", response_model=PrepKitResponse, status_code=201)
-def generate_prepkit(body: PrepKitRequest, db: Session = Depends(get_db)):
+@limiter.limit("5/minute")
+def generate_prepkit(request: Request, body: PrepKitRequest, db: Session = Depends(get_db)):
     """B2C Prep Kit: generate safe document checklist + questions.
     Case packet ALWAYS goes to needs_approval.
     Lead is auto-routed to partner tenant if routing rules exist."""
+    _check_honeypot(body)
 
     tenant = db.query(Tenant).filter(Tenant.id == body.tenant_id).first()
     if not tenant:
@@ -113,7 +129,17 @@ def generate_prepkit(body: PrepKitRequest, db: Session = Depends(get_db)):
     db.add(matter)
     db.flush()
 
-    # 3. Run agent (mock) to generate case packet
+    # 3. Generate structured PrepKit via GPT (or fallback)
+    prepkit_data = _prepkit_llm.generate_prepkit(
+        case_type=body.case_type,
+        description=body.description,
+        language=body.language,
+    )
+
+    # 4. Pass PrepKit output through PolicyEngine (UPL guard)
+    prepkit_data = _prepkit_policy.check_and_annotate(prepkit_data)
+
+    # 5. Run agent for internal case packet (goes to approval queue)
     agent_result = orchestrator.run("intake_specialist", {
         "case_type": body.case_type,
         "description": body.description,
@@ -121,7 +147,7 @@ def generate_prepkit(body: PrepKitRequest, db: Session = Depends(get_db)):
         "language": body.language,
     })
 
-    # 4. Store agent run as needs_approval (ALWAYS)
+    # 6. Store agent run as needs_approval (ALWAYS)
     agent_run = AgentRun(
         tenant_id=body.tenant_id,
         matter_id=matter.id,
@@ -133,7 +159,7 @@ def generate_prepkit(body: PrepKitRequest, db: Session = Depends(get_db)):
     db.add(agent_run)
     db.flush()
 
-    # 5. Create mandatory approval
+    # 7. Create mandatory approval
     approval = Approval(
         tenant_id=body.tenant_id,
         matter_id=matter.id,
@@ -143,7 +169,7 @@ def generate_prepkit(body: PrepKitRequest, db: Session = Depends(get_db)):
     )
     db.add(approval)
 
-    # 6. Create lead + route to partner
+    # 8. Create lead + route to partner
     lead = Lead(
         tenant_id=body.tenant_id,
         source_type="b2c_prepkit",
@@ -166,12 +192,24 @@ def generate_prepkit(body: PrepKitRequest, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(intake)
 
+    # Use GPT-generated checklist/questions, fall back to templates if blocked
+    policy_blocked = "_policy_status" in prepkit_data
+    doc_checklist = (
+        _get_checklist_for_vertical(body.case_type) if policy_blocked
+        else prepkit_data.get("checklist_docs", _get_checklist_for_vertical(body.case_type))
+    )
+    questions = (
+        _get_questions_for_vertical(body.case_type) if policy_blocked
+        else prepkit_data.get("questions_for_lawyer", _get_questions_for_vertical(body.case_type))
+    )
+    disclaimer = prepkit_data.get("disclaimer", _get_disclaimer_for_vertical(body.case_type, body.language))
+
     return PrepKitResponse(
         intake_id=intake.id,
-        document_checklist=_get_checklist_for_vertical(body.case_type),
-        questions_for_attorney=_get_questions_for_vertical(body.case_type),
+        document_checklist=doc_checklist,
+        questions_for_attorney=questions,
         case_packet_status="needs_approval",
-        disclaimer=_get_disclaimer_for_vertical(body.case_type, body.language),
+        disclaimer=disclaimer,
         message=(
             "Su expediente ha sido generado. Un profesional revisará su caso. "
             "Le contactaremos cuando la revisión esté completa."
@@ -184,8 +222,10 @@ def generate_prepkit(body: PrepKitRequest, db: Session = Depends(get_db)):
 
 
 @router.post("/public/onboard", response_model=OnboardTenantResponse, status_code=201)
-def onboard_tenant(body: OnboardTenantRequest, db: Session = Depends(get_db)):
+@limiter.limit("3/minute")
+def onboard_tenant(request: Request, body: OnboardTenantRequest, db: Session = Depends(get_db)):
     """B2B: create a new tenant + admin user."""
+    _check_honeypot(body)
     existing = db.query(User).filter(User.email == body.admin_email).first()
     if existing:
         raise HTTPException(status_code=400, detail="Email already registered")
