@@ -6,11 +6,13 @@ import Link from 'next/link';
 import MatterCard from '@/components/MatterCard';
 import { useI18n } from '@/lib/i18n';
 import ErrorCard from '@/components/ErrorCard';
+import { SkeletonCard } from '@/components/Skeleton';
 
 export default function DashboardPage() {
   const { t } = useI18n();
   const [matters, setMatters] = useState<any[]>([]);
   const [intakes, setIntakes] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
   const loadData = async () => {
@@ -21,6 +23,8 @@ export default function DashboardPage() {
       setIntakes(i.filter((x: any) => x.status === 'new'));
     } catch {
       setError(true);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -43,13 +47,31 @@ export default function DashboardPage() {
 
   if (error) return <div className="py-12"><ErrorCard onRetry={loadData} /></div>;
 
+  if (loading) {
+    return (
+      <div>
+        <h1 className="text-2xl font-bold mb-6">{t('dashboard.title')}</h1>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {[1, 2, 3].map((i) => <SkeletonCard key={i} />)}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div>
       <h1 className="text-2xl font-bold mb-6">{t('dashboard.title')}</h1>
 
-      {intakes.length > 0 && (
-        <section className="mb-8">
-          <h2 className="text-lg font-semibold mb-3">{t('dashboard.pendingIntakes')} ({intakes.length})</h2>
+      <section className="mb-8">
+        <h2 className="text-lg font-semibold mb-3">{t('dashboard.pendingIntakes')} ({intakes.length})</h2>
+        {intakes.length === 0 ? (
+          <div className="text-center py-8 bg-gray-50 rounded-lg">
+            <p className="text-gray-400 mb-2">{t('dashboard.noIntakes')}</p>
+            <Link href="/intake" className="text-blue-600 hover:underline text-sm">
+              {t('emptyStates.noIntakesCta')}
+            </Link>
+          </div>
+        ) : (
           <div className="space-y-3">
             {intakes.map((intake: any) => (
               <div key={intake.id} className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
@@ -77,13 +99,16 @@ export default function DashboardPage() {
               </div>
             ))}
           </div>
-        </section>
-      )}
+        )}
+      </section>
 
       <section>
         <h2 className="text-lg font-semibold mb-3">{t('dashboard.activeMatters')} ({matters.length})</h2>
         {matters.length === 0 ? (
-          <p className="text-gray-500">{t('dashboard.noMatters')}</p>
+          <div className="text-center py-8 bg-gray-50 rounded-lg">
+            <p className="text-gray-400 mb-2">{t('dashboard.noMatters')}</p>
+            <p className="text-xs text-gray-400">{t('emptyStates.noMattersCta')}</p>
+          </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {matters.map((matter: any) => (

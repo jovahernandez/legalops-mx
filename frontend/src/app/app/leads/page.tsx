@@ -5,6 +5,7 @@ import { api } from '@/lib/api';
 import { track } from '@/lib/tracker';
 import { useI18n } from '@/lib/i18n';
 import ErrorCard from '@/components/ErrorCard';
+import { SkeletonTable } from '@/components/Skeleton';
 
 interface Lead {
   id: string;
@@ -51,7 +52,12 @@ export default function LeadsPage() {
   const filtered = filter ? leads.filter((l) => l.status === filter) : leads;
   const filterKeys = ['', 'new', 'routed', 'contacted', 'converted', 'lost'];
 
-  if (loading) return <div className="p-8 text-gray-500">{t('common.loading')}</div>;
+  if (loading) return (
+    <div>
+      <h1 className="text-2xl font-bold mb-4">{t('leads.title')}</h1>
+      <SkeletonTable rows={5} />
+    </div>
+  );
   if (error) return <div className="py-12"><ErrorCard onRetry={loadLeads} /></div>;
 
   return (
@@ -74,7 +80,10 @@ export default function LeadsPage() {
       </div>
 
       {filtered.length === 0 ? (
-        <div className="text-center py-12 text-gray-400">{t('leads.noLeads')}</div>
+        <div className="text-center py-12 bg-gray-50 rounded-lg">
+          <p className="text-gray-400 mb-2">{t('leads.noLeads')}</p>
+          <p className="text-xs text-gray-400">{t('emptyStates.noLeadsCta')}</p>
+        </div>
       ) : (
         <div className="bg-white rounded-lg border shadow-sm overflow-hidden">
           <table className="w-full text-sm">

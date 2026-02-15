@@ -27,6 +27,7 @@ export default function OnboardTenantPage() {
   const [result, setResult] = useState<any>(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
   const toggleArea = (key: string) => {
     setForm((prev) => ({
@@ -106,8 +107,10 @@ export default function OnboardTenantPage() {
           </div>
           <div>
             <label className="block text-sm font-medium mb-1">{t('onboarding.adminPassword')} *</label>
-            <input type="password" required className="w-full border rounded-lg px-3 py-2.5"
-              value={form.admin_password} onChange={(e) => setForm({ ...form, admin_password: e.target.value })} />
+            <input type="password" required className={`w-full border rounded-lg px-3 py-2.5 ${fieldErrors.password ? 'border-red-400' : ''}`}
+              value={form.admin_password} onChange={(e) => { setForm({ ...form, admin_password: e.target.value }); setFieldErrors({ ...fieldErrors, password: '' }); }} />
+            <p className="text-xs text-gray-400 mt-0.5">{t('validation.passwordMinLength')}</p>
+            {fieldErrors.password && <p className="text-red-500 text-xs mt-0.5">{fieldErrors.password}</p>}
           </div>
           <div>
             <label className="block text-sm font-medium mb-3">{t('onboarding.practiceAreas')}</label>
@@ -122,10 +125,17 @@ export default function OnboardTenantPage() {
               ))}
             </div>
           </div>
-          <button onClick={() => setStep(2)} disabled={!form.firm_name || !form.admin_email || !form.admin_password}
+          <button onClick={() => {
+            const errs: Record<string, string> = {};
+            if (form.admin_password.length < 8) errs.password = t('validation.passwordMinLength');
+            if (form.practice_areas.length === 0) errs.areas = t('validation.selectPracticeArea');
+            setFieldErrors(errs);
+            if (Object.keys(errs).length === 0) setStep(2);
+          }} disabled={!form.firm_name || !form.admin_email || !form.admin_password}
             className="w-full py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition disabled:opacity-50">
             {t('onboarding.nextStep')}
           </button>
+          {fieldErrors.areas && <p className="text-red-500 text-xs mt-1">{fieldErrors.areas}</p>}
         </div>
       )}
 

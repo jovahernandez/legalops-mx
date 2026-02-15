@@ -288,5 +288,23 @@
     "submit": "Submit Feedback",
     "thanks": "Thanks for your feedback!",
     "ratingLabel": "Rating"
+  },
+  "emptyStates": {
+    "noIntakesCta": "Create a new intake",
+    "noMattersCta": "Cases will appear when intakes are processed",
+    "noLeadsCta": "Leads will appear when PrepKits are generated",
+    "noApprovalsCta": "No items pending review",
+    "noAnalyticsCta": "Data will appear as the platform is used"
+  },
+  "validation": {
+    "phoneFormat": "Format: +52 55 1234 5678",
+    "phoneInvalid": "Invalid phone format",
+    "emailInvalid": "Invalid email format",
+    "fieldRequired": "Required field",
+    "descriptionMinLength": "Describe your situation with at least 20 characters",
+    "passwordMinLength": "Minimum 8 characters",
+    "selectPracticeArea": "Select at least one practice area",
+    "consentRequired": "You must accept the privacy notice",
+    "consentLabel": "I accept the privacy notice and the processing of my personal data"
   }
 }

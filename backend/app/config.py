@@ -8,6 +8,8 @@ class Settings(BaseSettings):
     JWT_ALGORITHM: str = "HS256"
     JWT_EXPIRATION_MINUTES: int = 480
     UPLOAD_DIR: str = "/app/uploads"
+    OPENAI_API_KEY: str = ""
+    FRONTEND_URL: str = "http://localhost:3000"
 
     model_config = {"env_file": ".env", "extra": "allow"}
 

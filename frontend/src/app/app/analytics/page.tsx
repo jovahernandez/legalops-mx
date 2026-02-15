@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { api } from '@/lib/api';
 import { useI18n } from '@/lib/i18n';
 import ErrorCard from '@/components/ErrorCard';
+import { SkeletonKPI } from '@/components/Skeleton';
 
 const VERTICALS = ['mx_divorce', 'mx_consumer', 'mx_labor', 'immigration', 'tax_resolution'];
 
@@ -42,6 +43,17 @@ export default function AnalyticsPage() {
   useEffect(() => { loadFunnel(); }, [selectedVertical]);
 
   if (error) return <div className="py-12"><ErrorCard onRetry={loadData} /></div>;
+
+  if (!overview7) {
+    return (
+      <div>
+        <h1 className="text-2xl font-bold mb-6">{t('analytics.title')}</h1>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          {[1, 2, 3, 4, 5].map((i) => <SkeletonKPI key={i} />)}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>

@@ -288,5 +288,23 @@
     "submit": "Enviar Feedback",
     "thanks": "\u00a1Gracias por tu feedback!",
     "ratingLabel": "Calificaci\u00f3n"
+  },
+  "emptyStates": {
+    "noIntakesCta": "Crear un nuevo intake",
+    "noMattersCta": "Los casos aparecer\u00e1n cuando se procesen intakes",
+    "noLeadsCta": "Los prospectos aparecer\u00e1n cuando se generen PrepKits",
+    "noApprovalsCta": "No hay elementos pendientes de revisi\u00f3n",
+    "noAnalyticsCta": "Los datos aparecer\u00e1n conforme se use la plataforma"
+  },
+  "validation": {
+    "phoneFormat": "Formato: +52 55 1234 5678",
+    "phoneInvalid": "Formato de tel\u00e9fono inv\u00e1lido",
+    "emailInvalid": "Formato de correo inv\u00e1lido",
+    "fieldRequired": "Campo obligatorio",
+    "descriptionMinLength": "Describe tu situaci\u00f3n con al menos 20 caracteres",
+    "passwordMinLength": "M\u00ednimo 8 caracteres",
+    "selectPracticeArea": "Selecciona al menos un \u00e1rea de pr\u00e1ctica",
+    "consentRequired": "Debes aceptar el aviso de privacidad",
+    "consentLabel": "Acepto el aviso de privacidad y el tratamiento de mis datos personales"
   }
 }

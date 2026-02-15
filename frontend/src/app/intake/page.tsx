@@ -18,6 +18,9 @@ const ENTIDADES = [
   'Sonora', 'Tabasco', 'Tamaulipas', 'Tlaxcala', 'Veracruz', 'Yucat\u00e1n', 'Zacatecas',
 ];
 
+const validatePhone = (phone: string) => /^\+?\d{10,15}$/.test(phone.replace(/[\s\-()]/g, ''));
+const validateEmail = (email: string) => !email || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
 export default function IntakePage() {
   const { t } = useI18n();
   const [form, setForm] = useState({
@@ -27,6 +30,8 @@ export default function IntakePage() {
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState('');
   const [intakeId, setIntakeId] = useState('');
+  const [consent, setConsent] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
     trackPageView({ page: 'intake' });
@@ -37,6 +42,16 @@ export default function IntakePage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault(); setError('');
+    const errs: Record<string, string> = {};
+    if (!form.full_name) errs.full_name = t('validation.fieldRequired');
+    if (!form.phone) errs.phone = t('validation.fieldRequired');
+    else if (!validatePhone(form.phone)) errs.phone = t('validation.phoneInvalid');
+    if (form.email && !validateEmail(form.email)) errs.email = t('validation.emailInvalid');
+    if (!form.description) errs.description = t('validation.fieldRequired');
+    if (!consent) errs.consent = t('validation.consentRequired');
+    setFieldErrors(errs);
+    if (Object.keys(errs).length > 0) return;
+
     track('intake_submitted', { case_type: form.case_type });
     try {
       const params = new URLSearchParams(window.location.search);
@@ -71,6 +86,7 @@ export default function IntakePage() {
   }
 
   const isMX = form.case_type.startsWith('mx_');
+  const clearErr = (field: string) => setFieldErrors((prev) => ({ ...prev, [field]: '' }));
 
   return (
     <div className="max-w-lg mx-auto px-4 py-6 sm:py-8">
@@ -83,21 +99,25 @@ export default function IntakePage() {
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block text-sm font-medium mb-1">{t('intake.fullName')} *</label>
-          <input required className="w-full border rounded-lg px-3 py-2.5 text-sm"
-            value={form.full_name} onChange={(e) => setForm({ ...form, full_name: e.target.value })} />
+          <input required className={`w-full border rounded-lg px-3 py-2.5 text-sm ${fieldErrors.full_name ? 'border-red-400' : ''}`}
+            value={form.full_name} onChange={(e) => { setForm({ ...form, full_name: e.target.value }); clearErr('full_name'); }} />
+          {fieldErrors.full_name && <p className="text-red-500 text-xs mt-1">{fieldErrors.full_name}</p>}
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
             <label className="block text-sm font-medium mb-1">{t('intake.whatsapp')} *</label>
-            <input required type="tel" className="w-full border rounded-lg px-3 py-2.5 text-sm"
+            <input required type="tel" className={`w-full border rounded-lg px-3 py-2.5 text-sm ${fieldErrors.phone ? 'border-red-400' : ''}`}
               placeholder="+52 55 1234 5678"
-              value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
+              value={form.phone} onChange={(e) => { setForm({ ...form, phone: e.target.value }); clearErr('phone'); }} />
+            <p className="text-xs text-gray-400 mt-0.5">{t('validation.phoneFormat')}</p>
+            {fieldErrors.phone && <p className="text-red-500 text-xs mt-0.5">{fieldErrors.phone}</p>}
           </div>
           <div>
             <label className="block text-sm font-medium mb-1">{t('intake.emailOptional')}</label>
-            <input type="email" className="w-full border rounded-lg px-3 py-2.5 text-sm"
-              value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
+            <input type="email" className={`w-full border rounded-lg px-3 py-2.5 text-sm ${fieldErrors.email ? 'border-red-400' : ''}`}
+              value={form.email} onChange={(e) => { setForm({ ...form, email: e.target.value }); clearErr('email'); }} />
+            {fieldErrors.email && <p className="text-red-500 text-xs mt-1">{fieldErrors.email}</p>}
           </div>
         </div>
 
@@ -130,9 +150,21 @@ export default function IntakePage() {
 
         <div>
           <label className="block text-sm font-medium mb-1">{t('intake.description')} *</label>
-          <textarea required rows={4} className="w-full border rounded-lg px-3 py-2.5 text-sm"
+          <textarea required rows={4} className={`w-full border rounded-lg px-3 py-2.5 text-sm ${fieldErrors.description ? 'border-red-400' : ''}`}
             placeholder={t('intake.descPlaceholder')}
-            value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
+            value={form.description} onChange={(e) => { setForm({ ...form, description: e.target.value }); clearErr('description'); }} />
+          {fieldErrors.description && <p className="text-red-500 text-xs mt-1">{fieldErrors.description}</p>}
+        </div>
+
+        <div>
+          <label className="flex items-start gap-2 text-sm cursor-pointer">
+            <input type="checkbox" className="mt-0.5 w-4 h-4 accent-blue-600"
+              checked={consent} onChange={(e) => { setConsent(e.target.checked); clearErr('consent'); }} />
+            <span className={fieldErrors.consent ? 'text-red-600' : 'text-gray-600'}>
+              {t('validation.consentLabel')}
+            </span>
+          </label>
+          {fieldErrors.consent && <p className="text-red-500 text-xs mt-1">{fieldErrors.consent}</p>}
         </div>
 
         <button type="submit"

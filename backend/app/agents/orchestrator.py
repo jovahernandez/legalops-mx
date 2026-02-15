@@ -8,7 +8,7 @@ import yaml
 from typing import Any
 from pathlib import Path
 
-from app.agents.mock_llm import MockLLMProvider
+from app.agents.openai_llm import OpenAIProvider
 from app.agents.policy_engine import PolicyEngine
 
 DEFINITIONS_DIR = Path(__file__).parent / "definitions"
@@ -16,7 +16,7 @@ DEFINITIONS_DIR = Path(__file__).parent / "definitions"
 
 class AgentOrchestrator:
     def __init__(self):
-        self.llm = MockLLMProvider()
+        self.llm = OpenAIProvider()
         self.policy = PolicyEngine()
         self._definitions: dict[str, dict] = {}
         self._load_definitions()

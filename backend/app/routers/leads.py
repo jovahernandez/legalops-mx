@@ -11,6 +11,7 @@ from app.schemas import (
     OnboardTenantRequest, OnboardTenantResponse,
 )
 from app.agents.orchestrator import AgentOrchestrator
+from app.config import settings
 from app.services.lead_routing import route_lead
 from app.routers.templates import VERTICAL_TEMPLATES
 
@@ -211,8 +212,9 @@ def onboard_tenant(body: OnboardTenantRequest, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(tenant)
 
+    base_url = settings.FRONTEND_URL.rstrip("/")
     embed_snippet = (
-        f'<a href="http://localhost:3000/intake?tenant_id={tenant.id}'
+        f'<a href="{base_url}/intake?tenant_id={tenant.id}'
         f'&utm_source=widget&utm_medium=embed&utm_campaign={body.firm_name.lower().replace(" ", "_")}" '
         f'target="_blank" style="padding:12px 24px;background:#2563eb;color:white;'
         f'border-radius:8px;text-decoration:none;font-family:sans-serif;">'
@@ -223,7 +225,7 @@ def onboard_tenant(body: OnboardTenantRequest, db: Session = Depends(get_db)):
         tenant_id=tenant.id,
         admin_email=body.admin_email,
         embed_snippet=embed_snippet,
-        login_url="http://localhost:3000/app/login",
+        login_url=f"{base_url}/app/login",
     )
 
 
